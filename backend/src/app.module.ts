@@ -7,6 +7,8 @@ import { Booking } from './entities/booking.entity';
 import { Ticket } from './entities/ticket.entity';
 import { AuthModule } from './auth/auth.module';
 import { AdminController } from './admin/admin.controller';
+import { TripsModule } from './trips/trips.module';
+import { BookingsModule } from './bookings/bookings.module';
 
 @Module({
   imports: [
@@ -22,6 +24,8 @@ import { AdminController } from './admin/admin.controller';
       synchronize: true, 
     }),
     AuthModule,
+    TripsModule,
+    BookingsModule,
   ],
   controllers: [AdminController],
 })
