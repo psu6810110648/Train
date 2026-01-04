@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, UseGuards, Query } from '@nestjs/common'; // 👈 1. เพิ่ม Query ตรงนี้
+import { Controller, Get, Post, Body, UseGuards, Query } from '@nestjs/common'; // 1. Import Query
 import { AuthGuard } from '@nestjs/passport';
 import { Roles } from '../auth/roles.decorator';
 import { RolesGuard } from '../auth/roles.guard';
@@ -19,12 +19,12 @@ export class TripsController {
   // 2. ดูเที่ยวรถทั้งหมด + รองรับการค้นหา 🔍
   @Get()
   findAll(
-    // 👇 รับค่าจาก URL (เช่น ?origin=BKK&destination=CNX)
+    // 👇 รับค่าจาก URL เช่น /trips?origin=Bangkok&date=2024-12-25
     @Query('origin') origin?: string,
     @Query('destination') destination?: string,
     @Query('date') date?: string,
   ) {
-    // ส่งต่อให้ Service ไปค้นหาตามเงื่อนไข
+    // ส่งค่าที่รับมาไปให้ Service กรองข้อมูล
     return this.tripsService.findAll(origin, destination, date);
   }
 }
