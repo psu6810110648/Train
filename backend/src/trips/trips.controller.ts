@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, UseGuards, Query } from '@nestjs/common'; // 👈 1. เพิ่ม Query ตรงนี้
 import { AuthGuard } from '@nestjs/passport';
 import { Roles } from '../auth/roles.decorator';
 import { RolesGuard } from '../auth/roles.guard';
@@ -10,15 +10,21 @@ export class TripsController {
 
   // 1. สร้างเที่ยวรถใหม่ (เฉพาะ Admin เท่านั้น 👮‍♂️)
   @Post()
-  @UseGuards(AuthGuard('jwt'), RolesGuard) // เรียกยามมาตรวจ
-  @Roles('admin') // ระบุว่าต้องเป็น admin
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Roles('admin')
   create(@Body() body: any) {
     return this.tripsService.create(body);
   }
 
-  // 2. ดูเที่ยวรถทั้งหมด (เปิดให้ทุกคนดูได้ จะได้จองตั๋วถูก 📢)
+  // 2. ดูเที่ยวรถทั้งหมด + รองรับการค้นหา 🔍
   @Get()
-  findAll() {
-    return this.tripsService.findAll();
+  findAll(
+    // 👇 รับค่าจาก URL (เช่น ?origin=BKK&destination=CNX)
+    @Query('origin') origin?: string,
+    @Query('destination') destination?: string,
+    @Query('date') date?: string,
+  ) {
+    // ส่งต่อให้ Service ไปค้นหาตามเงื่อนไข
+    return this.tripsService.findAll(origin, destination, date);
   }
 }
